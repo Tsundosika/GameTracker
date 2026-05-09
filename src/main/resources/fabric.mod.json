@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "gametracker",
+  "version": "${version}",
+
+  "name": "GameTracker",
+  "description": "Tracks your games on mcpvp or other pvp servers to show them in a nice hud",
+  "authors": ["Tsundosika (Ren)"],
+  "contact": {},
+
+  "license": "All-Rights-Reserved",
+  "icon": "assets/gametracker/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "main": ["at.tsundosika.gametracker.Gametracker"],
+    "modmenu": ["at.tsundosika.gametracker.modmenu.ModMenuIntegration"]
+  },
+
+  "mixins": [
+    "gametracker.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "cloth-config": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

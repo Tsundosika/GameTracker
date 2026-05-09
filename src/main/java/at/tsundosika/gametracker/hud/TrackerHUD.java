@@ -1,6 +1,7 @@
 package at.tsundosika.gametracker.hud;
 
 import at.tsundosika.gametracker.config.GametrackerConfig;
+import at.tsundosika.gametracker.config.HudDisplayMode;
 import at.tsundosika.gametracker.session.SessionTracker;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -78,21 +79,24 @@ public class TrackerHUD {
         List<Component> lines = new ArrayList<>();
 
         lines.add(Component.literal("GameTracker").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        lines.add(
-            Component.literal("Wins: ").withStyle(ChatFormatting.GREEN)
-                .append(Component.literal(String.valueOf(tracker.getTotalWins())).withStyle(ChatFormatting.WHITE))
-        );
-        lines.add(
-            Component.literal("Losses: ").withStyle(ChatFormatting.RED)
-                .append(Component.literal(String.valueOf(tracker.getTotalLosses())).withStyle(ChatFormatting.WHITE))
-        );
+
+        if (config.displayMode == HudDisplayMode.SESSION || config.displayMode == HudDisplayMode.BOTH) {
+            lines.add(Component.literal("Session").withStyle(ChatFormatting.AQUA, ChatFormatting.UNDERLINE));
+            lines.add(wlLine(tracker.getSessionWins(), tracker.getSessionLosses()));
+        }
+
+        if (config.displayMode == HudDisplayMode.ALL_TIME || config.displayMode == HudDisplayMode.BOTH) {
+            lines.add(Component.literal("All Time").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.UNDERLINE));
+            lines.add(wlLine(tracker.getAllTimeWins(), tracker.getAllTimeLosses()));
+        }
+
         lines.add(
             Component.literal("Mode: ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(tracker.getCurrentMode()).withStyle(ChatFormatting.WHITE))
         );
 
         if (config.showPerMode) {
-            Map<String, long[]> byMode = tracker.getStatsByMode();
+            Map<String, long[]> byMode = tracker.getSessionStatsByMode();
             if (!byMode.isEmpty()) {
                 lines.add(Component.literal("--- Per Mode ---").withStyle(ChatFormatting.DARK_GRAY));
                 byMode.forEach((mode, wl) -> {
@@ -107,5 +111,11 @@ public class TrackerHUD {
         }
 
         return lines;
+    }
+
+    private static MutableComponent wlLine(int wins, int losses) {
+        return Component.literal(wins + "W").withStyle(ChatFormatting.GREEN)
+            .append(Component.literal(" / ").withStyle(ChatFormatting.GRAY))
+            .append(Component.literal(losses + "L").withStyle(ChatFormatting.RED));
     }
 }

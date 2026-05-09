@@ -16,4 +16,6 @@ public class GametrackerConfig implements ConfigData {
     public int hudY = 4;
 
     public boolean showPerMode = true;
+
+    public HudDisplayMode displayMode = HudDisplayMode.BOTH;
 }

@@ -5,7 +5,9 @@ import at.tsundosika.gametracker.config.GametrackerConfig;
 import at.tsundosika.gametracker.hud.HudPositionScreen;
 import at.tsundosika.gametracker.hud.TrackerHUD;
 import at.tsundosika.gametracker.listener.ChatListener;
+import at.tsundosika.gametracker.listener.ConnectionListener;
 import at.tsundosika.gametracker.listener.ScoreboardListener;
+import at.tsundosika.gametracker.session.SessionTracker;
 import com.mojang.blaze3d.platform.InputConstants;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -34,8 +36,10 @@ public class Gametracker implements ModInitializer {
             }
         });
 
+        SessionTracker.getInstance().loadAllTime();
         ChatListener.register();
         ScoreboardListener.register();
+        ConnectionListener.register();
         TrackerCommand.register();
         TrackerHUD.register();
     }
